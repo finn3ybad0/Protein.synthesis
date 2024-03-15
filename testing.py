@@ -1,0 +1,3 @@
+import bioInfo
+
+print(adn)
