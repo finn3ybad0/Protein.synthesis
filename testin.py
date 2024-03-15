@@ -74,7 +74,7 @@ codons_aa = {
     "GGC": "Glycine",
     "GGA": "Glycine",
     "GGG": "Glycine"}
-
+# a comment was added
 lettreAa = {
     "UUU": "F",
     "UUC": "F",
