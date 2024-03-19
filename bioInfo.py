@@ -1,14 +1,17 @@
-#Name: Finney Bado
-#Date: 2024-03-08
-#Description: This program synthetise a protein amino-acid sequence given a DNA nucleotid sequence
-#The result is displayed as grid
+# Name: Finney Bado &
+# Date: 2024-03-08
+# Description: This program synthesize a protein amino-acid sequence given a DNA nucleotide sequence
+# The result is displayed as grid
 
 
 #######################################################################################################################
 #                                        DONNÉES
 #######################################################################################################################
 
-adn="TCGACTGCGATCGACAGCCAGCGAAGCCAGCCAGCCGATACCCAGCCAGCCAGCCAGCGAAGCCAGCCAGCCGATACCCAGCCAGCCAGCCAGCGACG\
+import turtle
+
+
+adn = "TCGACTGCGATCGACAGCCAGCGAAGCCAGCCAGCCGATACCCAGCCAGCCAGCCAGCGAAGCCAGCCAGCCGATACCCAGCCAGCCAGCCAGCGACG\
 GCCAGCCAGCCAGCCAGCGAAGCCAGCCAGCCGAGTGCCAGCCAGCCAGCCAGCGAACTGCGATCGACAGCCAGCGAAGCCAGCCAGCCGAATGCCAGCCAGC\
 CAGCCAGCGAAGCCAGCCAGCCGATATTCAGCCAGCCAGCCAGCGAACACTCTTCGACAGCCAGCGAAGCCAGCCAGCCGATATTCAGCCAGCCAGCCAGCGA\
 ACTCGACACTCTTCGACAGCCAGCGAAGCCAGCCAGCCGATTGCCAGCCAGCCAGCCAGCGAAGCCAGCCAGCCGATTGCCAGCCAGCATCCCAGCGATACCC\
@@ -81,7 +84,8 @@ codons_aa = {
     "GGU": "Glycine",
     "GGC": "Glycine",
     "GGA": "Glycine",
-    "GGG": "Glycine"}
+    "GGG": "Glycine",
+}
 
 lettreAa = {
     "UUU": "F",
@@ -147,7 +151,7 @@ lettreAa = {
     "GGU": "G",
     "GGC": "G",
     "GGA": "G",
-    "GGG": "G"
+    "GGG": "G",
 }
 
 
@@ -156,134 +160,228 @@ lettreAa = {
 #######################################################################################################################
 
 
+def antisens(brinAdn: str) -> str:
 
-def antisens(brinAdn):
-    if brinAdn == "":
-        print('invalid input : no sequence')
-    else :
-        complement={"A":"T","G":"C","T":"A","C":"G"}
-        brinCompl=""
-        for i in brinAdn:
-            if i not in "ATGC" :
-                print("invalid input : sequence contains invalid nucleotid")
-                break
-            else:
-                brinCompl= complement[i] + brinCompl
-        return brinCompl
+    # define a dict that maps every nucleotide to it's complement
+    complement = {
+        "A": "T",
+        "G": "C",
+        "T": "A",
+        "C": "G"
+    }
+    # Initialize an empty string to store the complement of the DNA strand
+    brinCompl = ""
+
+    # concatenate every nucleotide to the beginning of the complement string so that they can be read left to right
+    for i in brinAdn:
+        brinCompl = complement[i] + brinCompl
+
+    return brinCompl
 
 
 def testAntisens(brinAdn):
-    pass  #take in account invalid nucleotid and also empty input
 
-def trouveDebut(brinAdn):
-    position=[]
+    assert antisens("AAAAAAAAAAAAAAA") == "TTTTTTTTTTTTTTT"
+    assert antisens("TTTTTTTTTTTTTTT") == "AAAAAAAAAAAAAAA"
+    assert antisens("ATCGATCGATCGATC") == "CGATCGATCGATCGA"
+
+
+def trouveDebut(brinAdn: str) -> list:
+
+    # Initialize an empty list to store the positions of gene strand beginnings
+    position = []
+    # Find the position of the first occurrence of "TAC" sequence in the DNA strand (if it exists )
     index = brinAdn.find("TAC")
-    while index != -1 :
+
+    # Find the positions of the next occurrences of "TAC" and add them to the list (if they exist)
+    while index != -1:
         position.append(index)
         index = brinAdn.find("TAC", index + 3)
+
     return position
 
 
 def testTrouveDebut(brinAdn):
-    pass
+
+    assert trouveDebut("ACGTCGTAGCGATCGATCGTACGTCGTAGCTAG") == []
+    assert trouveDebut("TACGTCGATCGTACGTAGCGATCGATCGTAGCT") == [0, 11]
+    assert trouveDebut("ACGTCGATCGTATAGCTATAGCTAGCTAGGTAC") == [33]
+
 
 def trouveFin(brinAdn):
+    # Initialize
     position = []
     indexATT = brinAdn.find("ATT")
     indexACT = brinAdn.find("ACT")
     indexATC = brinAdn.find("ATC")
-    while indexATT!=-1 or indexACT!= -1 or indexATC != -1:
-        if indexATT!=-1:
+
+    #
+    while indexATT != -1 or indexACT != -1 or indexATC != -1:
+        #
+        if indexATT != -1:
+            #
             position.append(indexATT)
             indexATT = brinAdn.find("ATT", indexATT + 3)
-        if indexACT!=-1:
+
+        if indexACT != -1:
+
             position.append(indexACT)
-            indexACT = brinAdn.find("ACT",indexACT + 3)
-        if indexATC!=-1:
+            indexACT = brinAdn.find("ACT", indexACT + 3)
+
+        if indexATC != -1:
+
             position.append(indexATC)
             indexATC = brinAdn.find("ATC", indexATC + 3)
+    #
     position.sort()
+
+    #
     return position
 
-#
-# def testTrouveFin(brinAdn):
-#     assert
-#     assert
-#     assert
-#     assert
-#
+
+def testTrouveFin(brinAdn):
+
+    assert trouveFin("ACGTCGTAGCGATCGATCGTACGTCGTAGCTAG") == []
+    assert trouveFin("ACTGTCGATCGTAGCTAGCGATCGATCGTAGCT") == [0]
+    assert trouveFin("CGTCGATCGTAGCTAGCGATCGATCGTAGCATT") == [33]
+    assert trouveFin("ACGTCGATCGTAGCGCTATTGCTAGCTAGCTAG") == [6, 17]
+
+
 def trouveGene(debut, fin):
-    pointerDebut=0
-    pointerFin=0
-    positionGene=[]
-    while pointerFin < len(fin) and pointerDebut < len(debut):
-        if debut[pointerDebut] < fin[pointerFin]:
-            if (fin[pointerFin] - debut[pointerDebut] )% 3 == 0 :
-                positionGene.append((debut[pointerDebut],fin[pointerFin]))
-                pointerDebut += 1
-        pointerFin +=1
+    #
+    curseurDebut = 0
+    curseurFin = 0
+    positionGene = []
+
+    #
+    while curseurFin < len(fin) and curseurDebut < len(debut):
+        #
+        if debut[curseurDebut] < fin[curseurFin]:
+            #
+            if (fin[curseurFin] - debut[curseurDebut]) % 3 == 0:
+                #
+                positionGene.append((debut[curseurDebut], fin[curseurFin]))
+                curseurDebut += 1
+
+        curseurFin += 1
+
+    #
     return positionGene
-#
-# def testTrouveGene(debut,fin):
-#     assert
-#     assert
-#     assert
-#     assert
-#
+
+
+def testTrouveGene(debut, fin):
+
+    assert trouveGene([], []) == []
+    assert trouveGene([0], [3]) == [(0, 3)]
+    assert trouveGene([0, 6, 12], [3, 9, 15]) == [(0, 3), (6, 9), (12, 15)]
+    assert trouveGene([0, 6, 10], [8, 12, 15]) == [(0, 8), (6, 12), (10, 15)]
+    assert trouveGene([0, 6], [15]) == [(0, 15)]
+
+
 def transcrire(brinAdn):
-    complementArn={"A":"U","G":"C","T":"A","C":"G"}
-    brinArn=""
-    for i in brinAdn :
-        brinArn+= complementArn[i]
+
+    # define a dict that maps every nucleotide to it's ARN complement
+    complementArn = {
+        "A": "U",
+        "G": "C",
+        "T": "A",
+        "C": "G"
+    }
+    # Initialize an empty string to store the complement of the DNA strand
+    brinArn = ""
+
+    # concatenate every complementary nucleotide to generate the ARN strand
+    for i in brinAdn:
+        brinArn += complementArn[i]
+
     return brinArn
 
-#     pass
-#
-# def testTranscrire(brinAdn):
-#     assert
-#     assert
-#     assert
-#     assert
-#
+
+def testTranscrire(brinAdn):
+
+    assert (transcrire("AACGTGTCTGAAGCTAGCTGGATCCTAGCGATCG") == "AAUGUGUCUGAAGCUAGCUGGAUCCUAGCGAUCG")
+    assert (transcrire("TTAGCGCTAGTCTAGCTAGCTAGCTAGCTAGCTA") == "UUCGCGCUAGUCUAGCUAGCUAGCUAGCUAGCUA")
+    assert (transcrire("ATCGCGATAGCGCTAGCTGATCGATCGGCTAGCT") == "AUCGCGAUAGCGCUAGCUGAUCGAUCGGCUAGCU")
+
+
 def traduire(brinArn):
-    pointer=0
-    protein=""
-    while pointer<len(brinArn)-3:
-            print(pointer)
-            codon= brinArn[pointer] + brinArn[pointer+1] + brinArn[pointer+2]
-            if pointer == len(brinArn)-6:
-                protein += codons_aa[codon]
-            else :
-                protein += codons_aa[codon] + " - "
-            pointer+=3
-    return protein
 
-def testTraduire(brinArn):
-    pass
+    # Initialize a cursor to track nucleotide position and an empty string that will contain the protein sequence
+    curseur = 0
+    protein = ""
+    proteinLettre = ""
+    coté = 20
+
+    # create a string chain representing the ARN corresponding protein
+    while curseur < len(brinArn) - 3:
+        # from the cursor , the subsequent codon is identified
+        codon = brinArn[curseur] + brinArn[curseur + 1] + brinArn[curseur + 2]
+        # if it's a stop codon, no hyphen's added
+        if curseur == len(brinArn) - 6:
+            protein += codons_aa[codon]
+
+        else:
+            protein += codons_aa[codon] + " - "
+
+        proteinLettre += lettreAa[codon]
+
+        curseur += 3
+
+    print(protein)
+    indice = 0
+    for i in proteinLettre:
+        carre(coté, indice)
+        ecrireCarre(coté, indice, i)
+        indice += 1
+
+    return indice + sauteLigne(indice)
+
+
+
 def carre(longueur, nombre):
+
+    origin = turtle.pos()
+    positionX = (nombre % 15) * longueur + -400
+    positionY = 300 - (nombre // 15) * longueur
+    turtle.penup()
+    turtle.goto(positionX,positionY)
+    turtle.pendown()
+    for i in range(4):
+        turtle.fd(longueur)
+        turtle.rt(90)
+
+
+def sauteLigne(nombre: int) -> int:
+    indexDeCarre = 15 - (nombre % 15)
+    return indexDeCarre
+
+
+def centrerGrille(longueur: int, maxLongueur: int, maxLargeur: int):
     pass
 
-def testCarre(longueur,nombre):
+
+def ecrireCarre(longueur, nombre, texte):
+    positionX = (nombre % 15) * longueur + -400
+    positionY = 300 - (nombre // 15) * longueur
+    turtle.penup()
+    turtle.goto(positionX + longueur/2, positionY - longueur/1.25)
+    turtle.pendown()
+    turtle.write(texte)
     pass
 
 
-
-
-
-
-
-
+def file():
+    return
 #######################################################################################################################
 #                                        FONCTION PRINCIPALE ET TEST UNITAIRES
 #######################################################################################################################
 
 
 def adnToProtein(brinAdn):
-    adn=[brinAdn,antisens(brinAdn)]
+    adn = [brinAdn, antisens(brinAdn)]
     print(adn)
-    genes=[]
+    genes = []
     for i in adn:
-        genes.append(trouveGene(trouveDebut(i),trouveFin(i)))
+        genes.append(trouveGene(trouveDebut(i), trouveFin(i)))
     # for i in genes:
     return genes
-

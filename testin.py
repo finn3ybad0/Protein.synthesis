@@ -1,4 +1,6 @@
 import bioInfo
+import sys
+
 
 adn="TCGACTGCGATCGACAGCCAGCGAAGCCAGCCAGCCGATACCCAGCCAGCCAGCCAGCGAAGCCAGCCAGCCGATACCCAGCCAGCCAGCCAGCGACG\
 GCCAGCCAGCCAGCCAGCGAAGCCAGCCAGCCGAGTGCCAGCCAGCCAGCCAGCGAACTGCGATCGACAGCCAGCGAAGCCAGCCAGCCGAATGCCAGCCAGC\
@@ -144,33 +146,4 @@ lettreAa = {
 
 
 
-# # comp = bioInfo.trouveGene(bioInfo.trouveDebut(adn),bioInfo.trouveFin(adn))
-# # print(comp)
-# #
-# # comp1 = bioInfo.trouveDebut(adn)
-# # print(comp1)
-# # comp2 = bioInfo.trouveFin(adn)
-# # print(comp2)
-# #
-# # print(bioInfo.transcrire("ATGAAACCCGGGTTTTAA"))
-# #
-# # print(list(filter(lambda x:(x-402)>0 and (x-402)%3==0,[3, 9, 154, 160, 226, 249, 283, 304, 311, 343, 379, 392, 437, 460, 466, 494, 517, 556, 592, 614, 650, 673, 679, 720])))
-# print(bioInfo.traduire("AUGCCGCUAGCUAGCCUAGCUAGCCUA"))
-#
-# import turtle
-#
-# finn =turtle.Turtle()
-#
-# def drawsom():
-#     finn.fd(100)
-#     finn.rt(90)
-#
-# turtle.delay(200)
-# drawsom()
-# print("Hello !!")
-# turtle.delay(200)
-# drawsom()
-
-
-i= [i for i in range(10)]
-print(i)
+bioInfo.traduire("AUGGUGUCUGAAGCUAGCUGGAUCCUAGCGAUCUUUUAG")
