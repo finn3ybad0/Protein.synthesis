@@ -179,11 +179,11 @@ def antisens(brinAdn: str) -> str:
     return brinCompl
 
 
-def testAntisens(brinAdn):
+def testAntisens():
 
-    assert antisens("AAAAAAAAAAAAAAA") == "TTTTTTTTTTTTTTT"
-    assert antisens("TTTTTTTTTTTTTTT") == "AAAAAAAAAAAAAAA"
-    assert antisens("ATCGATCGATCGATC") == "CGATCGATCGATCGA"
+    assert antisens("AAAAAAAAAAAAAAAAAA") == "TTTTTTTTTTTTTTTTTT"
+    assert antisens("TTTTTTTTTTTTTTTTTT") == "AAAAAAAAAAAAAAAAAA"
+    assert antisens("ATCGATCGATCGATC") == "GATCGATCGATCGAT"
 
 
 def trouveDebut(brinAdn: str) -> list:
@@ -201,11 +201,11 @@ def trouveDebut(brinAdn: str) -> list:
     return position
 
 
-def testTrouveDebut(brinAdn):
+def testTrouveDebut():
 
-    assert trouveDebut("ACGTCGTAGCGATCGATCGTACGTCGTAGCTAG") == []
+    assert trouveDebut("ACGTCGTAGCGATCGATCGTAGGTCGTAGCTAG") == []
     assert trouveDebut("TACGTCGATCGTACGTAGCGATCGATCGTAGCT") == [0, 11]
-    assert trouveDebut("ACGTCGATCGTATAGCTATAGCTAGCTAGGTAC") == [33]
+    assert trouveDebut("ACGTCGATCGTATAGCTATAGCTAGCTAGGTAC") == [30]
 
 
 def trouveFin(brinAdn: str) -> list:
@@ -239,11 +239,11 @@ def trouveFin(brinAdn: str) -> list:
     return position
 
 
-def testTrouveFin(brinAdn):
+def testTrouveFin():
 
-    assert trouveFin("ACGTCGTAGCGATCGATCGTACGTCGTAGCTAG") == []
-    assert trouveFin("ACTGTCGATCGTAGCTAGCGATCGATCGTAGCT") == [0]
-    assert trouveFin("CGTCGATCGTAGCTAGCGATCGATCGTAGCATT") == [33]
+    assert trouveFin("ACGTCGTAGCGATAGACCGTACGTCGTAGCTAG") == []
+    assert trouveFin("ATTGTCGATAGTAGCTAGCGATGGTTCGTAGCT") == [0]
+    assert trouveFin("CGTCGATGGTAGCTAGCGAGCGAACGTAGCACT") == [30]
     assert trouveFin("ACGTCGATCGTAGCGCTATTGCTAGCTAGCTAG") == [6, 17]
 
 
@@ -257,19 +257,20 @@ def trouveGene(debut: list, fin: list) -> list:
         for j in fin:
             if i < j:
                 if (j-i) % 3 == 0:
+                    positionGene.append((i, j))
                     break
-        positionGene.append((i, j))
+
 
     return positionGene
 
 
-def testTrouveGene(debut, fin):
+def testTrouveGene():
 
     assert trouveGene([], []) == []
     assert trouveGene([0], [3]) == [(0, 3)]
     assert trouveGene([0, 6, 12], [3, 9, 15]) == [(0, 3), (6, 9), (12, 15)]
-    assert trouveGene([0, 6, 10], [8, 12, 15]) == [(0, 8), (6, 12), (10, 15)]
-    assert trouveGene([0, 6], [15]) == [(0, 15)]
+    assert trouveGene([3, 6, 10], [8, 12, 15]) == [(3, 12), (6, 12)]
+    assert trouveGene([0, 6], [15]) == [(0, 15), (6, 15)]
 
 
 def transcrire(brinAdn: str) -> str:
@@ -291,11 +292,11 @@ def transcrire(brinAdn: str) -> str:
     return brinArn
 
 
-def testTranscrire(brinAdn):
+def testTranscrire():
 
-    assert (transcrire("AACGTGTCTGAAGCTAGCTGGATCCTAGCGATCG") == "AAUGUGUCUGAAGCUAGCUGGAUCCUAGCGAUCG")
-    assert (transcrire("TTAGCGCTAGTCTAGCTAGCTAGCTAGCTAGCTA") == "UUCGCGCUAGUCUAGCUAGCUAGCUAGCUAGCUA")
-    assert (transcrire("ATCGCGATAGCGCTAGCTGATCGATCGGCTAGCT") == "AUCGCGAUAGCGCUAGCUGAUCGAUCGGCUAGCU")
+    assert (transcrire("TACAACGTGTCTGAAGCTAGCTGGATCCTAGCGATCGACT") == "AUGUUGCACAGACUUCGAUCGACCUAGGAUCGCUAGCUGA")
+    assert (transcrire("TACTTAGCGCTAGTCTAGCTAGCTAGCTAGCTAGCTAATT") == "AUGAAUCGCGAUCAGAUCGAUCGAUCGAUCGAUCGAUUAA")
+    assert (transcrire("TACATGGCGATAGCGCTAGCTGATCGACCGGCTAGCTATC") == "AUGUACCGCUAUCGCGAUCGACUAGCUGGCCGAUCGAUAG")
 
 
 def traduire(brinArn: str) -> None:
@@ -354,14 +355,6 @@ def carre(longueur: float, nombre: int) -> None:
 
     turtle.rt(90); turtle.bk(decalageY)
     turtle.lt(90); turtle.bk(decalageX)
-
-
-#def sauteLigne(nombre: int) -> int:
-    indexDeCarre = 15 - (nombre % 15)
-
-
-# def centrerGrille(longueur: int, maxLongueur: int, maxLargeur: int):
-#     pass
 
 
 def ecrireCarre(longueur: float, nombre: int, texte: str):
