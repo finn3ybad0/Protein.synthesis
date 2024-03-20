@@ -340,15 +340,27 @@ def traduire(brinArn):
 
 def carre(longueur, nombre):
 
-    origin = turtle.pos()
-    positionX = (nombre % 15) * longueur + -400
-    positionY = 300 - (nombre // 15) * longueur
+    decalageX = (nombre % 15) * longueur
+    decalageY = (nombre // 15) * longueur
+
     turtle.penup()
-    turtle.goto(positionX,positionY)
+
+    turtle.fd(decalageX); turtle.rt(90)
+    turtle.fd(decalageY); turtle.lt(90)
     turtle.pendown()
+
     for i in range(4):
         turtle.fd(longueur)
         turtle.rt(90)
+
+    turtle.penup()
+
+    turtle.rt(90); turtle.bk(decalageY)
+    turtle.lt(90); turtle.bk(decalageX)
+
+    turtle.pendown()
+
+
 
 
 def sauteLigne(nombre: int) -> int:
