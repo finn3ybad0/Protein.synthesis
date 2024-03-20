@@ -142,8 +142,10 @@ lettreAa = {
     "GGC": "G",
     "GGA": "G",
     "GGG": "G" }
+turtle.penup()
+turtle.goto(0,400)
+turtle.speed(1000000000)
 
-
-print(bioInfo.traduire("AUCGCGAUAGCGCUAGCUGAUCGAUCGGCUAGCUAUCGCGAUAGCGCUAGCUGAUCGAUCGGCUAGCUAUCGCGAUAGCGCUAGCUGAUCGAUCGGCUAGCUAUCGCGAUAGCGCUAGCUGAUCGAUCGGCUAGCU"))
+bioInfo.adnToProtein(adn)
 
 turtle.mainloop()

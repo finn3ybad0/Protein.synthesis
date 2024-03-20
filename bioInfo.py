@@ -1,4 +1,4 @@
-# Name: Finney Bado &
+# Name: Finney Bado & Johnny Kana
 # Date: 2024-03-08
 # Description: This program synthesize a protein amino-acid sequence given a DNA nucleotide sequence
 # The result is displayed as grid
@@ -208,7 +208,7 @@ def testTrouveDebut(brinAdn):
     assert trouveDebut("ACGTCGATCGTATAGCTATAGCTAGCTAGGTAC") == [33]
 
 
-def trouveFin(brinAdn):
+def trouveFin(brinAdn: str) -> list:
     # Initialize
     position = []
     indexATT = brinAdn.find("ATT")
@@ -247,7 +247,7 @@ def testTrouveFin(brinAdn):
     assert trouveFin("ACGTCGATCGTAGCGCTATTGCTAGCTAGCTAG") == [6, 17]
 
 
-def trouveGene(debut, fin):
+def trouveGene(debut: list, fin: list) -> list:
     #
     curseurDebut = 0
     curseurFin = 0
@@ -278,7 +278,7 @@ def testTrouveGene(debut, fin):
     assert trouveGene([0, 6], [15]) == [(0, 15)]
 
 
-def transcrire(brinAdn):
+def transcrire(brinAdn: str) -> str:
 
     # define a dict that maps every nucleotide to it's ARN complement
     complementArn = {
@@ -304,7 +304,7 @@ def testTranscrire(brinAdn):
     assert (transcrire("ATCGCGATAGCGCTAGCTGATCGATCGGCTAGCT") == "AUCGCGAUAGCGCUAGCUGAUCGAUCGGCUAGCU")
 
 
-def traduire(brinArn):
+def traduire(brinArn: str) -> None:
 
     # Initialize a cursor to track nucleotide position and an empty string that will contain the protein sequence
     curseur = 0
@@ -335,11 +335,13 @@ def traduire(brinArn):
         ecrireCarre(coté, indice, i)
         indice += 1
 
+    # saut de ligne
+    sautdeligne = (indice // 15) + 2
+    turtle.rt(90); turtle.fd(sautdeligne*coté)
+    turtle.lt(90)
 
 
-
-
-def carre(longueur, nombre):
+def carre(longueur: float, nombre: int) -> None:
 
     decalageX = (nombre % 15) * longueur
     decalageY = (nombre // 15) * longueur
@@ -360,24 +362,18 @@ def carre(longueur, nombre):
     turtle.lt(90); turtle.bk(decalageX)
 
 
-
-
-
-
-def sauteLigne(nombre: int) -> int:
+#def sauteLigne(nombre: int) -> int:
     indexDeCarre = 15 - (nombre % 15)
-    return indexDeCarre
 
 
-def centrerGrille(longueur: int, maxLongueur: int, maxLargeur: int):
-    pass
+# def centrerGrille(longueur: int, maxLongueur: int, maxLargeur: int):
+#     pass
 
 
-def ecrireCarre(longueur, nombre, texte):
+def ecrireCarre(longueur: float, nombre: int, texte: str):
 
     decalageX = (nombre % 15) * longueur
     decalageY = (nombre // 15) * longueur
-
 
     turtle.fd(decalageX + longueur/2); turtle.rt(90)
     turtle.fd(decalageY + longueur/1.25); turtle.lt(90)
@@ -390,20 +386,30 @@ def ecrireCarre(longueur, nombre, texte):
     turtle.lt(90); turtle.bk(decalageX + longueur/2)
 
 
-
-
-def file():
-    return
 #######################################################################################################################
 #                                        FONCTION PRINCIPALE ET TEST UNITAIRES
 #######################################################################################################################
 
-
 def adnToProtein(brinAdn):
-    adn = [brinAdn, antisens(brinAdn)]
-    print(adn)
+
+    brinAntisens = antisens(brinAdn)
+
+    positionGeneBrinSup = trouveGene(trouveDebut(brinAdn), trouveFin(brinAdn))
+    positionGeneBrinInf = trouveGene(trouveDebut(brinAntisens), trouveFin(brinAntisens))
+
     genes = []
-    for i in adn:
-        genes.append(trouveGene(trouveDebut(i), trouveFin(i)))
-    # for i in genes:
-    return genes
+
+    for i in positionGeneBrinSup:
+        genes.append(brinAdn[i[0]:i[1]])
+    for i in positionGeneBrinInf:
+        genes.append(brinAntisens[i[0]:i[1]])
+
+    brinArn = []
+
+    for i in genes:
+        brinArn.append(transcrire(i))
+
+    for i in brinArn:
+        traduire(i)
+
+
