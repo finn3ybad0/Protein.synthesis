@@ -1,3 +1,0 @@
-import bioInfo
-
-print(adn)

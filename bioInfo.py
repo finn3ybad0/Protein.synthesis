@@ -328,13 +328,14 @@ def traduire(brinArn):
         curseur += 3
 
     print(protein)
+
     indice = 0
     for i in proteinLettre:
         carre(coté, indice)
         ecrireCarre(coté, indice, i)
         indice += 1
 
-    return indice + sauteLigne(indice)
+
 
 
 
@@ -358,7 +359,7 @@ def carre(longueur, nombre):
     turtle.rt(90); turtle.bk(decalageY)
     turtle.lt(90); turtle.bk(decalageX)
 
-    turtle.pendown()
+
 
 
 
@@ -373,13 +374,22 @@ def centrerGrille(longueur: int, maxLongueur: int, maxLargeur: int):
 
 
 def ecrireCarre(longueur, nombre, texte):
-    positionX = (nombre % 15) * longueur + -400
-    positionY = 300 - (nombre // 15) * longueur
-    turtle.penup()
-    turtle.goto(positionX + longueur/2, positionY - longueur/1.25)
+
+    decalageX = (nombre % 15) * longueur
+    decalageY = (nombre // 15) * longueur
+
+
+    turtle.fd(decalageX + longueur/2); turtle.rt(90)
+    turtle.fd(decalageY + longueur/1.25); turtle.lt(90)
     turtle.pendown()
+
     turtle.write(texte)
-    pass
+
+    turtle.penup()
+    turtle.rt(90); turtle.bk(decalageY + longueur/1.25)
+    turtle.lt(90); turtle.bk(decalageX + longueur/2)
+
+
 
 
 def file():
