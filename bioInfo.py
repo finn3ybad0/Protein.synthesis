@@ -253,19 +253,13 @@ def trouveGene(debut: list, fin: list) -> list:
     curseurFin = 0
     positionGene = []
 
-    #
-    while curseurFin < len(fin) and curseurDebut < len(debut):
-        #
-        if debut[curseurDebut] < fin[curseurFin]:
-            #
-            if (fin[curseurFin] - debut[curseurDebut]) % 3 == 0:
-                #
-                positionGene.append((debut[curseurDebut], fin[curseurFin]))
-                curseurDebut += 1
+    for i in debut:
+        for j in fin:
+            if i < j:
+                if (j-i) % 3 == 0:
+                    break
+        positionGene.append((i, j))
 
-        curseurFin += 1
-
-    #
     return positionGene
 
 
@@ -397,17 +391,20 @@ def adnToProtein(brinAdn):
     positionGeneBrinSup = trouveGene(trouveDebut(brinAdn), trouveFin(brinAdn))
     positionGeneBrinInf = trouveGene(trouveDebut(brinAntisens), trouveFin(brinAntisens))
 
+
     genes = []
 
     for i in positionGeneBrinSup:
-        genes.append(brinAdn[i[0]:i[1]])
+        genes.append(brinAdn[i[0]:i[1]+3])
     for i in positionGeneBrinInf:
-        genes.append(brinAntisens[i[0]:i[1]])
+        genes.append(brinAntisens[i[0]:i[1]+3])
+
 
     brinArn = []
 
     for i in genes:
         brinArn.append(transcrire(i))
+
 
     for i in brinArn:
         traduire(i)
