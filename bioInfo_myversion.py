@@ -10,8 +10,8 @@
 
 import turtle
 
-clear(800, 600)
-goto(-350, 250)
+# clear(800, 600)
+
 
 adn = "TCGACTGCGATCGACAGCCAGCGAAGCCAGCCAGCCGATACCCAGCCAGCCAGCCAGCGAAGCCAGCCAGCCGATACCCAGCCAGCCAGCCAGCGACG\
 GCCAGCCAGCCAGCCAGCGAAGCCAGCCAGCCGAGTGCCAGCCAGCCAGCCAGCGAACTGCGATCGACAGCCAGCGAAGCCAGCCAGCCGAATGCCAGCCAGC\
@@ -376,9 +376,9 @@ def ecrireCarre(longueur, nombre, texte):
 
     turtle.pu()
 
-    turtle.fd(decalageX + longueur / 2);
+    turtle.fd(decalageX + longueur / 2.25);
     turtle.rt(90)
-    turtle.fd(decalageY + longueur / 2);
+    turtle.fd(decalageY + longueur / 1.25);
     turtle.lt(90)
     turtle.pd()
 
@@ -386,9 +386,9 @@ def ecrireCarre(longueur, nombre, texte):
 
     turtle.pu()
     turtle.rt(90);
-    turtle.bk(decalageY + longueur / 2)
+    turtle.bk(decalageY + longueur / 1.25)
     turtle.lt(90);
-    turtle.bk(decalageX + longueur / 2)
+    turtle.bk(decalageX + longueur / 2.25)
     turtle.pd()
 
 
@@ -417,5 +417,7 @@ def adnToProtein(brinAdn):
     for i in brinArn:
         traduire(i)
 
-
-#adnToProtein(adn)
+turtle.pu()
+turtle.goto(-350, 250)
+turtle.speed(100000)
+adnToProtein(adn)

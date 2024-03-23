@@ -1,4 +1,4 @@
-import bioInfo
+import bioInfo_myversion
 import turtle
 
 
@@ -153,4 +153,3 @@ lettreAa = {
 # print(bioInfo.trouveFin(adn))
 # print(bioInfo.trouveDebut(adn))
 # print(bioInfo.trouveGene(bioInfo.trouveDebut(adn), bioInfo.trouveFin(adn)))
-print(bioInfo.trouveGene([3, 6, 10], [8, 12, 15]))
